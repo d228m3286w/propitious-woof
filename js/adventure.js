@@ -7,7 +7,9 @@ function Adventure(startX, startY, endX, endY, bound) {
 	this.start = new Thing(startX, startY);
 	this.end = new Thing(endX, endY, this, this.endAction, "retire.png");
     this.burns = new Thing(endX-1, endY-1, this, this.burnsAction, "burns.jpg");
-	this.stuff = [this.burns, this.end];
+	this.rock = new Thing(startX+1, startY+1, this, this.rockAction, "daRock.png");
+    this.doughnut = new Thing(startX+1, startY+2, this, this.doughnutAction, "PinkDoughnut.png");
+    this.stuff = [this.burns, this.rock, this.end, this.doughnut];
     this.bound = bound;
 	this.isGhost = false;
 
@@ -41,6 +43,10 @@ Adventure.prototype.mov = function(xChange, yChange) {
         coon.play();
         alert("D'oh!!!");
     }
+    // else if ((this.coord.x + xChange) == this.doughnut.x.coord || (this.coord.y + yChange) == this.doughnut.y.coord) {
+    //     this.doughnutAction();
+    // }
+    
     else {
  		this.hideAbe();
         this.coord.x += xChange;
@@ -56,7 +62,7 @@ Adventure.prototype.movStuff = function(xChange, yChange) {
             return true;
         }
     }
-    return false;
+    return false;  
 };
 
 Adventure.prototype.getID = function(param) {
@@ -114,10 +120,28 @@ Adventure.prototype.reset = function() {
     this.coord.y = this.start.y;
     this.isGhost = false;
     this.movAbe();
+
     for (var i = 0; i < this.stuff.length; i++) {
         this.place(this.stuff[i]); 
     }   
-}
+};
+Adventure.prototype.rockAction = function(xChange, yChange) {
+    alert("Do you smell what the rock is cooking?!");
+    reset();
+};
+
+
+Adventure.prototype.doughnutAction = function(xChange, yChange) {
+    this.adventure.hideAbe();
+    this.adventure.coord.x += xChange;
+    this.adventure.coord.y += yChange;
+    this.adventure.stuff.pop();
+    this.adventure.mov(0, 0);
+    
+
+};
+
+
 
 function Thing(x, y, adventure, action, image) {
     this.x = x;
